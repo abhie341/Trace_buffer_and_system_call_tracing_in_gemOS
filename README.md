@@ -246,20 +246,19 @@ If system call tracing is enabled for a process, gemOS captures two key pieces o
 
 The captured information is stored in a configured trace buffer. The user space can then consume this information by invoking the `read_strace` system call.
 
-### Figure 1
 
-![Figure 1: mmap() System Call](path/to/figure-4.png)
+![Figure 1: mmap() System Call](fig-1.png "Working of system call tracing: mmap called")
 
 In Figure 1, the `mmap()` system call is invoked, and information about this system call is saved in the trace buffer.
 
-### Figure 2
 
-![Figure 2: mprotect() System Call](path/to/figure-5.png)
+
+![Figure 2: mprotect() System Call](fig-2.png "Working of system call tracing: mprotect called")
 
 Following the `mmap()` system call, Figure 2 illustrates the invocation of the `mprotect()` system call, and its information is stored in the trace buffer.
 
-### Figure 3
 
-![Figure 3: read_strace() System Call](path/to/figure-6.png)
+
+![Figure 3: read_strace() System Call](fig-3.png "Working of system call tracing: Reading the trace")
 
 When a special system call, `read_strace()`, is called from the user space process (Figure 3), information captured about the traced system calls (stored in the trace buffer) is passed back to the user space. The working of the trace buffer remains consistent with the description in §1. For instance, read/write offsets of the trace buffer should be modified as required when information about the traced system calls is stored or consumed.
