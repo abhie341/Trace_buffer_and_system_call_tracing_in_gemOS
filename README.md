@@ -71,9 +71,6 @@ The `gemOS` source code is organized in the following directory structure:
 
 - **gemOS/src/Makefile:** Used to build the gemOS kernel binary `gemOS.kernel`. (Not to be modified)
 
-## Assignment Details
-
-As part of the assignment, the task involves implementing system calls in the teaching OS (gemOS). The source code is available in the `gemOS/src` directory.
 
 ### User Space Components
 
