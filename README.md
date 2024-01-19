@@ -187,3 +187,79 @@ os_free(vm, sizeof(struct vm_area));
 os_page_free(USER_REG, filep);
 ```
 Remember to refer to the specific files mentioned for detailed implementations.
+
+# gemOS Data Structures
+
+## `exec_context` Structure
+
+The `exec_context` structure, defined in `gemOS/src/include/context.h`, stores information about the memory regions belonging to a process. It consists of the following key components:
+```c
+struct exec_context {
+    ...
+    struct mm_segment mms[MAX_MM_SEGS];
+    struct vm_area *vm_area;
+    ...
+};
+```
+`mms`: An array of memory segments representing contiguous segments in a process. gemOS supports various memory segments, which are described by the following enum:
+```c
+enum {
+    MM_SEG_CODE,    // Code segment
+    MM_SEG_RODATA,  // Read-only data segment
+    MM_SEG_DATA,    // Data segment
+    MM_SEG_STACK,   // Stack segment
+    MAX_MM_SEGS      // Total number of segments
+};
+```
+`vm_area`: A linked list of memory regions allocated using `mmap()` for dis-contiguous mapping.
+##mm_segment Structure
+
+The `mm_segment` structure, also defined in `gemOS/src/include/context.h`, represents a memory segment:
+```c
+struct mm_segment {
+    unsigned long start;      // Start address of the memory segment
+    unsigned long end;        // End address
+    unsigned long next_free;  // Valid up to
+    u32 access_flags;         // Access flags. R=1, W=2, X=4
+};
+```
+## `vm_area` Structure
+
+The `vm_area` structure, defined in `gemOS/src/include/context.h`, represents a virtual memory area:
+```c
+struct vm_area {
+    unsigned long vm_start;   // Start address of the vm_area
+    unsigned long vm_end;     // End address
+    u32 access_flags;         // Access flags. R=1, W=2, X=4
+    struct vm_area *vm_next;  // Pointer to the next vm_area
+};
+```
+# Implementing System Call Tracing Functionality in gemOS
+
+In gemOS, we introduce system call tracing functionality similar to the strace utility in Linux. This feature allows the interception and recording of system calls invoked by a process.
+
+## Working
+
+If system call tracing is enabled for a process, gemOS captures two key pieces of information for each invoked system call:
+1. System call number.
+2. Values of each argument for the system call.
+
+The captured information is stored in a configured trace buffer. The user space can then consume this information by invoking the `read_strace` system call.
+
+### Figure 4
+
+![Figure 4: mmap() System Call](path/to/figure-4.png)
+
+In Figure 4, the `mmap()` system call is invoked, and information about this system call is saved in the trace buffer.
+
+### Figure 5
+
+![Figure 5: mprotect() System Call](path/to/figure-5.png)
+
+Following the `mmap()` system call, Figure 5 illustrates the invocation of the `mprotect()` system call, and its information is stored in the trace buffer.
+
+### Figure 6
+
+![Figure 6: read_strace() System Call](path/to/figure-6.png)
+
+When a special system call, `read_strace()`, is called from the user space process (Figure 6), information captured about the traced system calls (stored in the trace buffer) is passed back to the user space. The working of the trace buffer remains consistent with the description in §1. For instance, read/write offsets of the trace buffer should be modified as required when information about the traced system calls is stored or consumed.
