@@ -246,20 +246,20 @@ If system call tracing is enabled for a process, gemOS captures two key pieces o
 
 The captured information is stored in a configured trace buffer. The user space can then consume this information by invoking the `read_strace` system call.
 
-### Figure 4
+### Figure 1
 
-![Figure 4: mmap() System Call](path/to/figure-4.png)
+![Figure 1: mmap() System Call](path/to/figure-4.png)
 
-In Figure 4, the `mmap()` system call is invoked, and information about this system call is saved in the trace buffer.
+In Figure 1, the `mmap()` system call is invoked, and information about this system call is saved in the trace buffer.
 
-### Figure 5
+### Figure 2
 
-![Figure 5: mprotect() System Call](path/to/figure-5.png)
+![Figure 2: mprotect() System Call](path/to/figure-5.png)
 
-Following the `mmap()` system call, Figure 5 illustrates the invocation of the `mprotect()` system call, and its information is stored in the trace buffer.
+Following the `mmap()` system call, Figure 2 illustrates the invocation of the `mprotect()` system call, and its information is stored in the trace buffer.
 
-### Figure 6
+### Figure 3
 
-![Figure 6: read_strace() System Call](path/to/figure-6.png)
+![Figure 3: read_strace() System Call](path/to/figure-6.png)
 
-When a special system call, `read_strace()`, is called from the user space process (Figure 6), information captured about the traced system calls (stored in the trace buffer) is passed back to the user space. The working of the trace buffer remains consistent with the description in §1. For instance, read/write offsets of the trace buffer should be modified as required when information about the traced system calls is stored or consumed.
+When a special system call, `read_strace()`, is called from the user space process (Figure 3), information captured about the traced system calls (stored in the trace buffer) is passed back to the user space. The working of the trace buffer remains consistent with the description in §1. For instance, read/write offsets of the trace buffer should be modified as required when information about the traced system calls is stored or consumed.
